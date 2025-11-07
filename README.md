@@ -111,3 +111,34 @@ Deployment options:
 - Built as part of a Code Institute Data Analytics capstone.
 - Thanks to USGS-style earthquake data sources and open-source libraries (pandas, scikit-learn, xgboost, seaborn, matplotlib, joblib).
 
+## Data Sources & Licensing
+
+- **Dataset**: Earthquake records with tsunami flag (USGS-style format). Public domain seismic data aggregated for educational use.
+- **Licensing**: This project is for academic demonstration. Source data follows public domain or open data policies; always verify current licensing for production use.
+- **Societal Impact**: Tsunami early-warning systems save lives. This model is exploratory only; operational systems require rigorous validation, multi-sensor fusion, and regulatory approval.
+
+## AI Tool Usage
+
+- **GitHub Copilot**: Assisted with boilerplate code generation, interaction term mining logic, and threshold sweep utilities. Suggestions were reviewed and adapted to project-specific requirements.
+- **Impact**: Accelerated feature engineering experimentation and improved code documentation consistency. Human oversight ensured alignment with recall-first policy and reproducibility standards.
+
+## Reflection & Learning
+
+### Skills Gained
+- End-to-end ML pipeline: from raw data extraction through feature engineering, model selection, threshold tuning, and artifact persistence.
+- Recall-first evaluation strategy and precision–recall trade-off analysis.
+- Interactive dashboard design (Streamlit) for non-technical stakeholders.
+- Version control best practices and structured project documentation.
+
+### Challenges Encountered
+- Feature mismatches between engineered CSVs and model schemas required careful validation utilities.
+- Class imbalance necessitated threshold sweep rather than default 0.5 cutoff.
+- Balancing reproducibility (fixed seeds) with stochastic upstream algorithms (KMeans).
+
+### Future Learning Plan
+- Explore calibrated probability models (Platt scaling, isotonic regression) for improved confidence estimates.
+- Investigate cost-sensitive learning and dynamic threshold adjustment based on operational context.
+- Study multi-modal fusion (seismic + oceanographic sensors) for real-time early-warning architectures.
+- Deepen understanding of MLOps: model monitoring, drift detection, and automated retraining pipelines.
+
+

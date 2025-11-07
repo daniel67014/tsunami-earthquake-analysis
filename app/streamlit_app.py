@@ -6,6 +6,14 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import joblib
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+try:
+    from scipy import stats as stats
+    HAS_SCIPY = True
+except Exception:
+    HAS_SCIPY = False
 
 
 # ---------- Paths & loading ----------
@@ -222,13 +230,104 @@ def page_explain(meta: Dict, model) -> None:
     )
 
 
+def page_stats() -> None:
+    st.header("Dataset Statistics")
+    raw_path = (
+        Path(__file__).resolve().parent.parent
+        / "data" / "raw" / "earthquake_data_tsunami.csv"
+    )
+    if not raw_path.exists():
+        st.error(f"Raw data file not found: {raw_path}")
+        return
+    df = pd.read_csv(raw_path)
+    numeric_cols = [
+        c for c in df.columns if pd.api.types.is_numeric_dtype(df[c])
+    ]
+    if not numeric_cols:
+        st.warning("No numeric columns detected.")
+        return
+
+    st.subheader("Summary (mean, median, std, variance)")
+    summary = df[numeric_cols].describe().T
+    summary["variance"] = df[numeric_cols].var().values
+    st.dataframe(summary[["mean", "50%", "std", "variance", "min", "max"]])
+
+    # Choose magnitude-like column for histogram
+    col_candidates = [
+        c for c in numeric_cols if c.lower() in ["mag", "magnitude"]
+    ]
+    col = col_candidates[0] if col_candidates else numeric_cols[0]
+
+    st.subheader(f"Distribution: {col}")
+    data = df[col].dropna()
+    fig, ax = plt.subplots(figsize=(6, 4))
+    sns.histplot(
+        data,
+        bins=30,
+        kde=True,
+        stat="density",
+        ax=ax,
+        color="#4e79a7",
+    )
+    mu, sigma = np.nanmean(data), np.nanstd(data)
+    xs = np.linspace(data.min(), data.max(), 200)
+    normal_pdf = (
+        1.0
+        / (sigma * np.sqrt(2 * np.pi))
+        * np.exp(-0.5 * ((xs - mu) / sigma) ** 2)
+    )
+    ax.plot(
+        xs,
+        normal_pdf,
+        color="#e15759",
+        lw=2,
+        label=f"Normal fit (μ={mu:.2f}, σ={sigma:.2f})",
+    )
+    ax.legend()
+    ax.set_title(f"Distribution of {col} with normal overlay")
+    st.pyplot(fig)
+
+    st.caption(
+        "Shows LO 1.1 & 1.2: descriptive statistics & distribution analysis."
+    )
+
+
+def page_about() -> None:
+    st.header("About & Ethics")
+    st.markdown(
+        """
+        ### Project Summary
+        This classifier flags tsunami-related earthquakes using engineered seismic features and a recall-first threshold strategy.
+
+        ### Intended Use
+        Exploratory triage and educational demonstration. Not for operational early-warning decisions.
+
+        ### Ethical & Social Considerations
+        - **Recall-first trade-off**: Minimises missed tsunami-related events (false negatives) while accepting more false positives.
+        - **Bias & Data Quality**: Regional sensor coverage and reporting standards may bias feature distributions.
+        - **Transparency**: We expose model threshold, recall, and precision to avoid overstating reliability.
+        - **Misuse Risks**: Decisions solely based on this model could misallocate resources; always corroborate with authoritative sources.
+
+        ### Limitations & Alternatives
+        - Potential improvement via calibrated logistic regression or cost-sensitive learning.
+        - Continuous monitoring for drift recommended if deployed.
+
+        ### Learning Outcomes Covered
+        Ethics & governance (6.1, 6.2), communication (8.x), domain context (9.x), reflection (10.2, 11.2).
+        """
+    )
+
+
 def main():
     st.set_page_config(
         page_title="Tsunami–Earthquake Classifier", layout="wide"
     )
 
     st.sidebar.title("Tsunami–Earthquake Analysis")
-    page = st.sidebar.radio("Navigation", ["Predict", "Batch", "Explain"])
+    page = st.sidebar.radio(
+        "Navigation",
+        ["Predict", "Batch", "Explain", "Stats", "About"],
+    )
 
     try:
         meta = load_meta()
@@ -241,8 +340,12 @@ def main():
         page_predict(meta, model)
     elif page == "Batch":
         page_batch(meta, model)
-    else:
+    elif page == "Explain":
         page_explain(meta, model)
+    elif page == "Stats":
+        page_stats()
+    else:
+        page_about()
 
 
 if __name__ == "__main__":

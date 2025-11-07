@@ -1,6 +1,6 @@
 ## Tsunami–Earthquake Analysis
 
-This project builds a recall-first classifier to flag tsunami-related earthquakes from USGS-style seismic records. It includes a reproducible ETL and feature engineering pipeline (with interaction mining), model training and threshold tuning, and persisted artifacts ready for inference. A lightweight dashboard (Streamlit) is planned to make predictions and visualize model behavior.
+This project builds a recall-first classifier to flag tsunami-related earthquakes from USGS-style seismic records. It includes a reproducible ETL and feature engineering pipeline (with interaction mining), model training and threshold tuning, and persisted artifacts ready for inference. A lightweight dashboard (Streamlit) provides Predict, Batch, Explain, Stats, and About pages. See `docs/pass_criteria.md` for the assessment mapping.
 
 ### Repository structure
 
@@ -64,17 +64,18 @@ Tip: Re-running cells changes notebook outputs and will show as modified in sour
 - Best current model: RandomForest on the imputed-selected 8-feature set.
 - Decision threshold: 0.0 (recall-first). Candidates with recall 1.0 and higher precision also exist (e.g., small >0 thresholds); this can be tuned depending on tolerance for false positives.
 
-## Planned dashboard (Streamlit)
+## Dashboard (Streamlit)
 
-Goals:
-- Load the persisted model and threshold.
-- Accept manual inputs or a small CSV for batch scoring (enforcing the 8-feature schema from `model_meta.json`).
-- Display key outputs: predicted probability, decision (using threshold), feature importances, confusion matrix snapshot, and a precision–recall curve.
-
-MVP pages:
+Implemented pages:
 - Predict: form inputs + single prediction result.
 - Batch: upload CSV → predictions + download.
-- Explain: feature importance bar chart and notes on limitations.
+- Explain: feature importance bar chart and meta info.
+- Stats: descriptive statistics (mean, median, std, variance) & distribution with normal overlay.
+- About: non-technical summary, ethics, limitations, learning outcomes linkage.
+
+Upcoming enhancements:
+- Precision–recall curve visual in app (currently in Notebook 03).
+- Adjustable threshold slider to explore precision/recall trade-offs.
 
 ### Running the app locally
 

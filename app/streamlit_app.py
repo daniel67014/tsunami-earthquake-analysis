@@ -48,6 +48,20 @@ def load_model():
 def parse_interactions(
     features: List[str],
 ) -> Tuple[List[str], List[Tuple[str, ...]]]:
+    """
+    Parse feature list to separate base features from interaction terms.
+
+    Interaction terms are identified by ':' separator (e.g., 'dmin:Year').
+    Maintains stable ordering: non-interaction features first (in original
+    order), then any additional base features, then interactions.
+
+    Args:
+        features: List of feature names, may include interactions.
+
+    Returns:
+        Tuple of (ordered_base_features, interaction_tuples).
+        Example: (['dmin', 'Year'], [('dmin', 'Year')])
+    """
     base = set()
     interactions = []
     for f in features:
@@ -74,6 +88,25 @@ def parse_interactions(
 def compute_interaction_columns(
     df: pd.DataFrame, interactions: List[Tuple[str, ...]]
 ) -> pd.DataFrame:
+    """
+    Compute interaction (product) terms from base columns.
+
+    Creates new columns by multiplying base features together.
+    Example: ('dmin', 'Year') → column 'dmin:Year' = dmin * Year.
+
+    Args:
+        df: DataFrame containing base features.
+        interactions: List of tuples, each tuple defines features to multiply.
+
+    Returns:
+        DataFrame with interaction columns added.
+
+    Raises:
+        ValueError: If any base column required for interaction is missing.
+
+    Note:
+        Uses NumPy broadcasting for vectorized computation (no loops).
+    """
     df = df.copy()
     for parts in interactions:
         name = ":".join(parts)
@@ -94,6 +127,27 @@ def compute_interaction_columns(
 
 
 def ensure_schema(df: pd.DataFrame, required: List[str]) -> pd.DataFrame:
+    """
+    Validate and align DataFrame to model's required schema.
+
+    Ensures all required features (including interactions) are present and
+    correctly typed. Computes interaction columns if needed from base features.
+
+    Args:
+        df: Input DataFrame with raw or partially processed features.
+        required: List of required feature names (may include interactions).
+
+    Returns:
+        DataFrame with only required columns, numeric typed, in correct order.
+
+    Raises:
+        ValueError: If required features are missing after interaction
+            computation.
+
+    Example:
+        >>> required = ['dmin', 'Year', 'dmin:Year']
+        >>> df_aligned = ensure_schema(df, required)
+    """
     # Compute interactions if needed
     _, inters = parse_interactions(required)
     df2 = compute_interaction_columns(df, inters) if inters else df.copy()

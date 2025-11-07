@@ -49,6 +49,36 @@ setup.sh
 - Notebooks record selected features and model hyperparameters.
 - `model_meta.json` carries the canonical feature list and decision threshold used at inference time.
 
+## Code Quality & Optimization
+
+This project demonstrates several best practices and improvements:
+
+### Modular Design
+- **Reusable utilities**: `ensure_schema()`, `parse_interactions()`, and `compute_interaction_columns()` encapsulate schema validation and feature engineering logic, reducing duplication across prediction/batch workflows.
+- **Separation of concerns**: Model loading, threshold reading, and inference separated into focused functions.
+
+### Performance Optimization
+- **Caching**: Streamlit's `@st.cache_resource` avoids repeated model deserialization; `@st.cache_data` caches metadata loading.
+- **Vectorization**: Interaction terms computed via NumPy broadcasting (no Python loops), improving throughput for batch scoring.
+- **Lazy evaluation**: Dashboard pages load data only when accessed.
+
+### Error Handling & Validation
+- **Descriptive errors**: `ValueError` messages specify missing features by name, aiding debugging.
+- **Schema enforcement**: `ensure_schema()` prevents runtime type errors by coercing numeric columns and validating presence.
+- **Graceful fallbacks**: Default threshold (0.0) used if `threshold.txt` is unreadable.
+
+### Documentation
+- **Docstrings**: Key functions include Google-style docstrings with Args/Returns/Raises sections (see `streamlit_app.py`).
+- **Inline rationale**: Comments explain recall-first policy, interaction parsing logic, and reproducibility constraints.
+- **Version pinning**: `requirements.txt` specifies exact versions to ensure consistent environments.
+
+### Refactoring Examples
+- **Before**: Inline CSV column checks scattered across cells → **After**: Centralized `ensure_schema()` utility.
+- **Before**: Hardcoded file paths → **After**: `Path().resolve()` for cross-platform portability.
+- **Before**: Manual feature list synchronization → **After**: `model_meta.json` as single source of truth.
+
+These improvements support maintainability, reproducibility, and performance—critical for transitioning from prototype to production-ready analytics.
+
 ## How to run locally
 
 1. Create/activate a Python 3.12 virtual environment.

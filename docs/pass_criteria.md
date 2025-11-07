@@ -5,7 +5,7 @@
 | 1.1 Describe statistics, probability, and data analysis principles. | Notebook: brief explanations of mean, median, standard deviation, hypothesis testing, basic probability; note why foundational. | Yes |
 | 1.2 Illustrate application of these core principles. | Dashboard: display mean & variance; Notebook: example t-test or distribution usage (e.g. normal fit). | Yes |
 | 2.1 Utilise data analytics tools & Python. | Use Pandas for cleaning/manipulation; Seaborn/Matplotlib for visualization; Plotly interactive in dashboard. | Yes |
-| 2.2 Evaluate Python code and queries written. | Show improvements (comments, docstrings, rationale markdown); highlight fixes/optimisation. | Partial |
+| 2.2 Evaluate Python code and queries written. | Show improvements (comments, docstrings, rationale markdown); highlight fixes/optimisation. | Yes |
 | 2.3 Implement data analysis techniques, coding, and tool usage. | Perform classification (and optionally regression/clustering) with scikit-learn; show visual (e.g. feature importance). | Yes |
 | 3.1 Conduct analysis with methodologies on real dataset. | Follow data cleaning → EDA → feature engineering → modeling → evaluation; reflect steps. | Yes |
 | 3.2 Evaluate problem-solving approach & solutions. | Provide commentary on method choices; discuss limitations & alternatives. | Yes |

@@ -1,0 +1,18 @@
+{
+  "features": [
+    "dmin",
+    "Year",
+    "cdi",
+    "dmin:Year",
+    "gap",
+    "sig",
+    "magnitude",
+    "depth"
+  ],
+  "threshold": 0.0,
+  "sklearn_version": "1.3.1",
+  "xgboost_version": "1.7.6",
+  "random_state": 42,
+  "model": "RandomForestClassifier",
+  "notes": "Recall-first threshold tuned via precision\u2013recall sweep."
+}

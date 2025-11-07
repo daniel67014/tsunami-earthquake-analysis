@@ -2,6 +2,17 @@
 
 This project builds a recall-first classifier to flag tsunami-related earthquakes from USGS-style seismic records. It includes a reproducible ETL and feature engineering pipeline (with interaction mining), model training and threshold tuning, and persisted artifacts ready for inference. A lightweight dashboard (Streamlit) provides Predict, Batch, Explain, Stats, and About pages. See `docs/pass_criteria.md` for the assessment mapping.
 
+## Notebooks
+
+The analysis is documented in four Jupyter notebooks (run in order):
+
+1. **[01_etl_extract_raw.ipynb](jupyter_notebooks/01_etl_extract_raw.ipynb)** – Extract raw data, profile dataset, and apply foundational statistical concepts (mean, median, std, hypothesis testing).
+2. **[02_01_etl_transform.ipynb](jupyter_notebooks/02_01_etl_transform.ipynb)** – Data cleaning, missing value imputation, and reproducibility controls.
+3. **[02_02_etl_feature_engineering.ipynb](jupyter_notebooks/02_02_etl_feature_engineering.ipynb)** – Interaction mining, forward feature selection, and final feature set creation.
+4. **[03_model_training_and_prediction.ipynb](jupyter_notebooks/03_model_training_and_prediction.ipynb)** – Model training (RandomForest, AdaBoost, XGBoost), threshold tuning, precision-recall curve, ethics discussion, and artifact persistence.
+
+Each notebook includes markdown commentary explaining rationale, limitations, and decisions.
+
 ### Repository structure
 
 ```
@@ -96,16 +107,23 @@ Tip: Re-running cells changes notebook outputs and will show as modified in sour
 
 ## Dashboard (Streamlit)
 
-Implemented pages:
-- Predict: form inputs + single prediction result.
-- Batch: upload CSV → predictions + download.
-- Explain: feature importance bar chart and meta info.
-- Stats: descriptive statistics (mean, median, std, variance) & distribution with normal overlay.
-- About: non-technical summary, ethics, limitations, learning outcomes linkage.
+Interactive web interface for model inference and exploration. Complements the notebooks by providing:
 
-Upcoming enhancements:
-- Precision–recall curve visual in app (currently in Notebook 03).
-- Adjustable threshold slider to explore precision/recall trade-offs.
+**Implemented pages:**
+- **Predict**: Single earthquake prediction with manual feature inputs.
+- **Batch**: CSV upload for batch scoring with downloadable predictions.
+- **Explain**: Feature importance visualization (derived from trained model in Notebook 03).
+- **Stats**: Descriptive statistics and distribution analysis (extends statistical foundations from Notebook 01).
+- **About**: AI-generated executive summary, ethics, data licensing, and limitations discussion.
+
+**Upcoming enhancements:**
+- Precision–recall curve visual in app (currently in [Notebook 03](jupyter_notebooks/03_model_training_and_prediction.ipynb)).
+- Adjustable threshold slider to explore precision/recall trade-offs interactively.
+
+**Cross-references:**
+- Feature engineering logic: See [Notebook 02_02](jupyter_notebooks/02_02_etl_feature_engineering.ipynb) for interaction term derivation.
+- Model details & threshold selection: See [Notebook 03](jupyter_notebooks/03_model_training_and_prediction.ipynb).
+- Statistical foundations: See [Notebook 01](jupyter_notebooks/01_etl_extract_raw.ipynb).
 
 ### Running the app locally
 

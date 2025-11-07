@@ -76,6 +76,24 @@ MVP pages:
 - Batch: upload CSV → predictions + download.
 - Explain: feature importance bar chart and notes on limitations.
 
+### Running the app locally
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+Or (Heroku / Procfile expects `app.py`): create a thin `app.py` that imports and runs `streamlit_app.py`, or adjust the `Procfile` to point directly to `app/streamlit_app.py`.
+
+### Heroku deployment note
+
+Current `Procfile` runs: `streamlit run app.py`. Update it to:
+
+```
+web: sh setup.sh && streamlit run app/streamlit_app.py
+```
+
+Then push to the Heroku-connected branch.
+
 Deployment options:
 - Streamlit Community Cloud (simple) or Heroku (Procfile present; add `streamlit run app.py` entry). A `setup.sh` exists; adapt as needed.
 

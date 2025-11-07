@@ -294,27 +294,91 @@ def page_stats() -> None:
 
 def page_about() -> None:
     st.header("About & Ethics")
+    
+    # AI-generated executive summary for non-technical audiences
+    st.subheader("Executive Summary (AI-Generated)")
     st.markdown(
         """
-        ### Project Summary
-        This classifier flags tsunami-related earthquakes using engineered seismic features and a recall-first threshold strategy.
+        **What does this model do?**  
+        This tool analyzes earthquake data to predict whether a quake might 
+        trigger a tsunami. It uses patterns in seismic measurements—like 
+        location, depth, and magnitude—to flag high-risk events.
 
-        ### Intended Use
-        Exploratory triage and educational demonstration. Not for operational early-warning decisions.
+        **Why does it matter?**  
+        Tsunamis can devastate coastal communities with little warning. By 
+        quickly identifying tsunami-related earthquakes, this model could 
+        support early-alert systems, giving people precious extra minutes 
+        to evacuate.
 
-        ### Ethical & Social Considerations
-        - **Recall-first trade-off**: Minimises missed tsunami-related events (false negatives) while accepting more false positives.
-        - **Bias & Data Quality**: Regional sensor coverage and reporting standards may bias feature distributions.
-        - **Transparency**: We expose model threshold, recall, and precision to avoid overstating reliability.
-        - **Misuse Risks**: Decisions solely based on this model could misallocate resources; always corroborate with authoritative sources.
+        **How reliable is it?**  
+        The model is tuned to catch nearly all tsunami-related quakes 
+        (100% recall), but it also raises false alarms about 61% of the time. 
+        This trade-off prioritizes safety: better to warn unnecessarily than 
+        miss a real threat. Always corroborate predictions with authoritative 
+        tsunami warning centers.
 
-        ### Limitations & Alternatives
-        - Potential improvement via calibrated logistic regression or cost-sensitive learning.
-        - Continuous monitoring for drift recommended if deployed.
-
-        ### Learning Outcomes Covered
-        Ethics & governance (6.1, 6.2), communication (8.x), domain context (9.x), reflection (10.2, 11.2).
+        **Who should use it?**  
+        Educational demonstrations, risk assessment planning, and 
+        research prototyping. NOT for operational emergency response 
+        without rigorous validation.
         """
+    )
+
+    st.subheader("Data Sources & Legal Considerations")
+    st.markdown(
+        """
+        - **Data**: Public domain seismic records (USGS-style format) 
+        aggregated for academic use.
+        - **Licensing**: This project is educational. Verify current data 
+        licenses before any commercial or operational deployment.
+        - **Privacy**: No personal data involved; all records are 
+        aggregated geophysical measurements.
+        """
+    )
+
+    st.subheader("Intended Use")
+    st.markdown(
+        """
+        Exploratory triage and educational demonstration. Not for 
+        operational early-warning decisions.
+        """
+    )
+
+    st.subheader("Ethical & Social Considerations")
+    st.markdown(
+        """
+        - **Recall-first trade-off**: Minimises missed tsunami-related 
+        events (false negatives) while accepting more false positives.
+        - **Bias & Data Quality**: Regional sensor coverage and reporting 
+        standards may bias feature distributions.
+        - **Transparency**: We expose model threshold, recall, and 
+        precision to avoid overstating reliability.
+        - **Misuse Risks**: Decisions solely based on this model could 
+        misallocate resources; always corroborate with authoritative 
+        sources.
+        - **Societal Impact**: Effective early-warning systems save lives. 
+        This prototype demonstrates feasibility but requires operational 
+        validation, regulatory approval, and integration with existing 
+        tsunami alert infrastructure.
+        """
+    )
+
+    st.subheader("Limitations & Alternatives")
+    st.markdown(
+        """
+        - Potential improvement via calibrated logistic regression or 
+        cost-sensitive learning.
+        - Continuous monitoring for drift recommended if deployed.
+        - Multi-sensor fusion (oceanographic buoys, GPS displacement) 
+        would improve accuracy.
+        """
+    )
+
+    st.subheader("Learning Outcomes Covered")
+    st.caption(
+        "Ethics & governance (6.1, 6.2), AI storytelling (4.2), "
+        "communication (8.1, 8.2), domain context (9.x), "
+        "reflection (10.2, 11.2)."
     )
 
 

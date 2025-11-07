@@ -9,12 +9,6 @@ import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-try:
-    from scipy import stats as stats
-    HAS_SCIPY = True
-except Exception:
-    HAS_SCIPY = False
-
 
 # ---------- Paths & loading ----------
 MODELS_DIR = (
@@ -353,27 +347,27 @@ def page_about() -> None:
     st.subheader("Executive Summary (AI-Generated)")
     st.markdown(
         """
-        **What does this model do?**  
-        This tool analyzes earthquake data to predict whether a quake might 
-        trigger a tsunami. It uses patterns in seismic measurements—like 
+        **What does this model do?**
+        This tool analyzes earthquake data to predict whether a quake might
+        trigger a tsunami. It uses patterns in seismic measurements—like
         location, depth, and magnitude—to flag high-risk events.
 
-        **Why does it matter?**  
-        Tsunamis can devastate coastal communities with little warning. By 
-        quickly identifying tsunami-related earthquakes, this model could 
-        support early-alert systems, giving people precious extra minutes 
+        **Why does it matter?**
+        Tsunamis can devastate coastal communities with little warning. By
+        quickly identifying tsunami-related earthquakes, this model could
+        support early-alert systems, giving people precious extra minutes
         to evacuate.
 
-        **How reliable is it?**  
-        The model is tuned to catch nearly all tsunami-related quakes 
-        (100% recall), but it also raises false alarms about 61% of the time. 
-        This trade-off prioritizes safety: better to warn unnecessarily than 
-        miss a real threat. Always corroborate predictions with authoritative 
+        **How reliable is it?**
+        The model is tuned to catch nearly all tsunami-related quakes
+        (100% recall), but it also raises false alarms about 61% of the time.
+        This trade-off prioritizes safety: better to warn unnecessarily than
+        miss a real threat. Always corroborate predictions with authoritative
         tsunami warning centers.
 
-        **Who should use it?**  
-        Educational demonstrations, risk assessment planning, and 
-        research prototyping. NOT for operational emergency response 
+        **Who should use it?**
+        Educational demonstrations, risk assessment planning, and
+        research prototyping. NOT for operational emergency response
         without rigorous validation.
         """
     )
@@ -381,11 +375,11 @@ def page_about() -> None:
     st.subheader("Data Sources & Legal Considerations")
     st.markdown(
         """
-        - **Data**: Public domain seismic records (USGS-style format) 
+        - **Data**: Public domain seismic records (USGS-style format)
         aggregated for academic use.
-        - **Licensing**: This project is educational. Verify current data 
+        - **Licensing**: This project is educational. Verify current data
         licenses before any commercial or operational deployment.
-        - **Privacy**: No personal data involved; all records are 
+        - **Privacy**: No personal data involved; all records are
         aggregated geophysical measurements.
         """
     )
@@ -393,7 +387,7 @@ def page_about() -> None:
     st.subheader("Intended Use")
     st.markdown(
         """
-        Exploratory triage and educational demonstration. Not for 
+        Exploratory triage and educational demonstration. Not for
         operational early-warning decisions.
         """
     )
@@ -401,18 +395,18 @@ def page_about() -> None:
     st.subheader("Ethical & Social Considerations")
     st.markdown(
         """
-        - **Recall-first trade-off**: Minimises missed tsunami-related 
+        - **Recall-first trade-off**: Minimises missed tsunami-related
         events (false negatives) while accepting more false positives.
-        - **Bias & Data Quality**: Regional sensor coverage and reporting 
+        - **Bias & Data Quality**: Regional sensor coverage and reporting
         standards may bias feature distributions.
-        - **Transparency**: We expose model threshold, recall, and 
+        - **Transparency**: We expose model threshold, recall, and
         precision to avoid overstating reliability.
-        - **Misuse Risks**: Decisions solely based on this model could 
-        misallocate resources; always corroborate with authoritative 
+        - **Misuse Risks**: Decisions solely based on this model could
+        misallocate resources; always corroborate with authoritative
         sources.
-        - **Societal Impact**: Effective early-warning systems save lives. 
-        This prototype demonstrates feasibility but requires operational 
-        validation, regulatory approval, and integration with existing 
+        - **Societal Impact**: Effective early-warning systems save lives.
+        This prototype demonstrates feasibility but requires operational
+        validation, regulatory approval, and integration with existing
         tsunami alert infrastructure.
         """
     )
@@ -420,10 +414,10 @@ def page_about() -> None:
     st.subheader("Limitations & Alternatives")
     st.markdown(
         """
-        - Potential improvement via calibrated logistic regression or 
+        - Potential improvement via calibrated logistic regression or
         cost-sensitive learning.
         - Continuous monitoring for drift recommended if deployed.
-        - Multi-sensor fusion (oceanographic buoys, GPS displacement) 
+        - Multi-sensor fusion (oceanographic buoys, GPS displacement)
         would improve accuracy.
         """
     )

@@ -1,72 +1,94 @@
-# ![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+## Tsunami–Earthquake Analysis
 
-## Template Instructions
+This project builds a recall-first classifier to flag tsunami-related earthquakes from USGS-style seismic records. It includes a reproducible ETL and feature engineering pipeline (with interaction mining), model training and threshold tuning, and persisted artifacts ready for inference. A lightweight dashboard (Streamlit) is planned to make predictions and visualize model behavior.
 
-Welcome,
+### Repository structure
 
-This is the Code Institute student template for the Data Analytics capstone project. We have preinstalled all of the tools you need to get started. It's perfectly okay to use this template as the basis for your project submissions. Click the `Use this template` button above to get started.
-
-You can safely delete the Template Instructions section of this README.md file and modify the remaining paragraphs for your own project. Please do read the Template Instructions at least once, though! It contains some important information about the IDE and the extensions we use.
-
-## How to use this repo
-
-1. Use this template to create your GitHub project repo. Click the **Use this template** button, then click **Create a new repository**.
-
-1. Copy the URL of your repository to your clipboard.
-
-1. In VS Code, select **File** -> **Open Folder**.
-
-1. Select your `vscode-projects` folder, then click the **Select Folder** button on Windows, or the **Open** button on Mac.
-
-1. From the top menu in VS Code, select **Terminal** > **New Terminal** to open the terminal.
-
-1. In the terminal, type `git clone` followed by the URL of your GitHub repository. Then hit **Enter**. This command will download all the files in your GitHub repository into your vscode-projects folder.
-
-1. In VS Code, select **File** > **Open Folder** again.
-
-1. This time, navigate to and select the folder for the project you just downloaded. Then, click **Select Folder**.
-
-1. A virtual environment is necessary when working with Python projects to ensure each project's dependencies are kept separate from each other. You need to create your virtual environment, also called a venv, and then ensure that it is activated any time you return to your workspace.
-Click the gear icon in the lower left-hand corner of the screen to open the Manage menu and select **Command Palette** to open the VS Code command palette.
-
-1. In the command palette, type: *create environment* and select **Python: Create Environment…**
-
-1. Choose **Venv** from the dropdown list.
-
-1. Choose the Python version you installed earlier. Currently, we recommend Python 3.12.8
-
-1. **DO NOT** click the box next to `requirements.txt`, as you need to do more steps before you can install your dependencies. Click **OK**.
-
-1. You will see a `.venv` folder appear in the file explorer pane to show that the virtual environment has been created.
-
-1. **Important**: Note that the `.venv` folder is in the `.gitignore` file so that Git won't track it.
-
-1. Return to the terminal by clicking on the TERMINAL tab, or click on the **Terminal** menu and choose **New Terminal** if no terminal is currently open.
-
-1. In the terminal, use the command below to install your dependencies. This may take several minutes.
-
- ```console
- pip3 install -r requirements.txt
- ```
-
-1. Open the `jupyter_notebooks` directory, and click on the notebook you want to open.
-
-1. Click the **kernel** button and choose **Python Environments**.
-
-Note that the kernel says `Python 3.12.8` as it inherits from the venv, so it will be Python-3.12.8 if that is what is installed on your PC. To confirm this, you can use the command below in a notebook code cell.
-
-```console
-! python --version
+```
+data/
+	raw/                      # Source CSV (earthquake_data_tsunami.csv)
+	processed/                # Imputed base features
+	interaction/              # 2-way interaction exports (imputed/raw)
+jupyter_notebooks/
+	01_etl_extract_raw.ipynb
+	02_01_etl_transform.ipynb
+	02_02_etl_feature_engineering.ipynb
+	03_model_training_and_prediction.ipynb
+	models/
+		rf_imputed_selected.pkl
+		model_meta.json
+		threshold.txt
+Procfile
+requirements.txt
+setup.sh
 ```
 
-## Deployment Reminders
+## What’s implemented
 
-* Set the `.python-version` Python version to a [Heroku-22](https://devcenter.heroku.com/articles/python-support#supported-runtimes) stack currently supported version that closest matches what you used in this project.
-* The project can be deployed to Heroku using the following steps.
+- ETL and cleaning (01, 02_01)
+	- Handles missingness; produces an imputed dataset.
+	- Reproducibility controls (fixed seeds; documented where upstream algorithms like KMeans can still vary by permutation).
+- Feature engineering (02_02)
+	- 2-way interaction mining and forward selection.
+	- Final selected feature sets:
+		- Imputed (8): dmin, Year, cdi, dmin:Year, gap, sig, magnitude, depth
+		- Raw (6): Year, nst, sig, magnitude, Year:magnitude, depth
+- Modeling and evaluation (03)
+	- RandomForestClassifier (n_estimators=100, max_depth=8, class_weight=balanced, random_state=42).
+	- Recall-first policy with precision–recall threshold sweep.
+	- Current choice: imputed-selected model with threshold = 0.0 → recall 1.00, precision ~0.389 (meets recall ≥ 0.88, precision ≥ 0.30).
+	- Utilities: threshold sweep summary, confusion matrix at chosen threshold, model persistence.
+- Artifacts (persisted)
+	- `jupyter_notebooks/models/rf_imputed_selected.pkl`
+	- `jupyter_notebooks/models/model_meta.json` (features, threshold, versions, seed)
+	- `jupyter_notebooks/models/threshold.txt`
 
-1. Log in to Heroku and create an App
-2. At the **Deploy** tab, select **GitHub** as the deployment method.
-3. Select your repository name and click **Search**. Once it is found, click **Connect**.
-4. Select the branch you want to deploy, then click **Deploy Branch**.
-5. The deployment process should happen smoothly if all deployment files are fully functional. Click the button **Open App** at the top of the page to access your App.
-6. If the slug size is too large, then add large files not required for the app to the `.slugignore` file.
+## Reproducibility
+
+- Fixed random_state=42 across steps; KMeans and other stochastic components have explicit seeds and documented `n_init`.
+- Notebooks record selected features and model hyperparameters.
+- `model_meta.json` carries the canonical feature list and decision threshold used at inference time.
+
+## How to run locally
+
+1. Create/activate a Python 3.12 virtual environment.
+2. Install dependencies from `requirements.txt`.
+3. Run notebooks in order: 01 → 02_01 → 02_02 → 03.
+4. Notebook 03 will train models, perform threshold selection, and persist artifacts under `jupyter_notebooks/models/`.
+
+Tip: Re-running cells changes notebook outputs and will show as modified in source control; commit when you want to capture results.
+
+## Model details
+
+- Target: tsunami-related earthquake flag.
+- Best current model: RandomForest on the imputed-selected 8-feature set.
+- Decision threshold: 0.0 (recall-first). Candidates with recall 1.0 and higher precision also exist (e.g., small >0 thresholds); this can be tuned depending on tolerance for false positives.
+
+## Planned dashboard (Streamlit)
+
+Goals:
+- Load the persisted model and threshold.
+- Accept manual inputs or a small CSV for batch scoring (enforcing the 8-feature schema from `model_meta.json`).
+- Display key outputs: predicted probability, decision (using threshold), feature importances, confusion matrix snapshot, and a precision–recall curve.
+
+MVP pages:
+- Predict: form inputs + single prediction result.
+- Batch: upload CSV → predictions + download.
+- Explain: feature importance bar chart and notes on limitations.
+
+Deployment options:
+- Streamlit Community Cloud (simple) or Heroku (Procfile present; add `streamlit run app.py` entry). A `setup.sh` exists; adapt as needed.
+
+## Roadmap
+
+- [ ] Add Streamlit app (`app.py`) wired to persisted artifacts.
+- [ ] Add schema validator for inference (strict column presence and dtypes).
+- [ ] Document a recommended operating threshold (consider precision-improving alternative at same recall).
+- [ ] Add a minimal model card (assumptions, limitations, intended use).
+- [ ] Optional: persist a raw-selected model for comparison.
+
+## Acknowledgments
+
+- Built as part of a Code Institute Data Analytics capstone.
+- Thanks to USGS-style earthquake data sources and open-source libraries (pandas, scikit-learn, xgboost, seaborn, matplotlib, joblib).
+

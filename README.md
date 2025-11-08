@@ -6,10 +6,10 @@ This project builds a recall-first classifier to flag tsunami-related earthquake
 
 The analysis is documented in four Jupyter notebooks (run in order):
 
-1. **[01_etl_extract_raw.ipynb](jupyter_notebooks/01_etl_extract_raw.ipynb)** – Extract raw data, profile dataset, and apply foundational statistical concepts (mean, median, std, hypothesis testing).
-2. **[02_01_etl_transform.ipynb](jupyter_notebooks/02_01_etl_transform.ipynb)** – Data cleaning, missing value imputation, and reproducibility controls.
-3. **[02_02_etl_feature_engineering.ipynb](jupyter_notebooks/02_02_etl_feature_engineering.ipynb)** – Interaction mining, forward feature selection, and final feature set creation.
-4. **[03_model_training_and_prediction.ipynb](jupyter_notebooks/03_model_training_and_prediction.ipynb)** – Model training (RandomForest, AdaBoost, XGBoost), threshold tuning, precision-recall curve, ethics discussion, and artifact persistence.
+1. **[Notebook 1: Data Collection](jupyter_notebooks/01_etl_extract_raw.ipynb)** – Extract raw data, profile dataset, and apply foundational statistical concepts (mean, median, std, hypothesis testing).
+2. **[Notebook 2: Data Cleaning and Imputation](jupyter_notebooks/02_etl_transform.ipynb)** – Data cleaning, missing value imputation, and reproducibility controls.
+3. **[Notebook 3: Feature Engineering](jupyter_notebooks/03_etl_feature_engineering.ipynb)** – Interaction mining, forward feature selection, and final feature set creation.
+4. **[Notebook 4: Model Training and Evaluation](jupyter_notebooks/04_model_training_and_prediction.ipynb)** – Model training (RandomForest, AdaBoost, XGBoost), threshold tuning, precision-recall curve, ethics discussion, and artifact persistence.
 
 Each notebook includes markdown commentary explaining rationale, limitations, and decisions.
 
@@ -22,9 +22,9 @@ data/
 	interaction/              # 2-way interaction exports (imputed/raw)
 jupyter_notebooks/
 	01_etl_extract_raw.ipynb
-	02_01_etl_transform.ipynb
-	02_02_etl_feature_engineering.ipynb
-	03_model_training_and_prediction.ipynb
+	02_etl_transform.ipynb
+	03_etl_feature_engineering.ipynb
+	04_model_training_and_prediction.ipynb
 	models/
 		rf_imputed_selected.pkl
 		model_meta.json
@@ -36,20 +36,20 @@ setup.sh
 
 ## What’s implemented
 
-- ETL and cleaning (01, 02_01)
+- **ETL and cleaning** ([Notebook 1](jupyter_notebooks/01_etl_extract_raw.ipynb), [Notebook 2](jupyter_notebooks/02_etl_transform.ipynb))
 	- Handles missingness; produces an imputed dataset.
 	- Reproducibility controls (fixed seeds; documented where upstream algorithms like KMeans can still vary by permutation).
-- Feature engineering (02_02)
+- **Feature engineering** ([Notebook 3](jupyter_notebooks/03_etl_feature_engineering.ipynb))
 	- 2-way interaction mining and forward selection.
 	- Final selected feature sets:
 		- Imputed (8): dmin, Year, cdi, dmin:Year, gap, sig, magnitude, depth
 		- Raw (6): Year, nst, sig, magnitude, Year:magnitude, depth
-- Modeling and evaluation (03)
+- **Modeling and evaluation** ([Notebook 4](jupyter_notebooks/04_model_training_and_prediction.ipynb))
 	- RandomForestClassifier (n_estimators=100, max_depth=8, class_weight=balanced, random_state=42).
 	- Recall-first policy with precision–recall threshold sweep.
 	- Current choice: imputed-selected model with threshold = 0.0 → recall 1.00, precision ~0.389 (meets recall ≥ 0.88, precision ≥ 0.30).
 	- Utilities: threshold sweep summary, confusion matrix at chosen threshold, model persistence.
-- Artifacts (persisted)
+- **Artifacts** (persisted)
 	- `jupyter_notebooks/models/rf_imputed_selected.pkl`
 	- `jupyter_notebooks/models/model_meta.json` (features, threshold, versions, seed)
 	- `jupyter_notebooks/models/threshold.txt`
@@ -94,8 +94,8 @@ These improvements support maintainability, reproducibility, and performance—c
 
 1. Create/activate a Python 3.12 virtual environment.
 2. Install dependencies from `requirements.txt`.
-3. Run notebooks in order: 01 → 02_01 → 02_02 → 03.
-4. Notebook 03 will train models, perform threshold selection, and persist artifacts under `jupyter_notebooks/models/`.
+3. Run notebooks in order: [01](jupyter_notebooks/01_etl_extract_raw.ipynb) → [02](jupyter_notebooks/02_etl_transform.ipynb) → [03](jupyter_notebooks/03_etl_feature_engineering.ipynb) → [04](jupyter_notebooks/04_model_training_and_prediction.ipynb).
+4. Notebook 4 will train models, perform threshold selection, and persist artifacts under `jupyter_notebooks/models/`.
 
 Tip: Re-running cells changes notebook outputs and will show as modified in source control; commit when you want to capture results.
 

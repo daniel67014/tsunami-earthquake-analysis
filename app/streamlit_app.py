@@ -430,6 +430,121 @@ def page_about() -> None:
     )
 
 
+def page_notebooks():
+    """
+    Display Jupyter notebooks with navigation and embedding options.
+
+    Provides links to view notebooks on GitHub or nbviewer, with an option
+    to render them inline using Streamlit's iframe component.
+    """
+    st.title("📓 Jupyter Notebooks")
+
+    st.markdown(
+        """
+    The analysis is documented across four Jupyter notebooks that should
+    be run in sequence. Each notebook includes detailed markdown commentary
+    explaining methodology, decisions, and limitations.
+    """
+    )
+
+    notebooks = [
+        {
+            "number": "1",
+            "title": "Data Collection",
+            "file": "01_etl_extract_raw.ipynb",
+            "description": (
+                "Extract raw data from Kaggle, perform initial inspection, "
+                "and apply foundational statistical concepts."
+            ),
+        },
+        {
+            "number": "2",
+            "title": "Data Cleaning and Imputation",
+            "file": "02_etl_transform.ipynb",
+            "description": (
+                "Handle missing values, benchmark imputation strategies, "
+                "and produce cleaned dataset."
+            ),
+        },
+        {
+            "number": "3",
+            "title": "Feature Engineering",
+            "file": "03_etl_feature_engineering.ipynb",
+            "description": (
+                "Generate interaction terms, perform feature selection, "
+                "and export enhanced datasets."
+            ),
+        },
+        {
+            "number": "4",
+            "title": "Model Training and Evaluation",
+            "file": "04_model_training_and_prediction.ipynb",
+            "description": (
+                "Train models, tune threshold for recall optimization, "
+                "and persist artifacts."
+            ),
+        },
+    ]
+
+    st.markdown("---")
+
+    # Display each notebook with options to view
+    for nb in notebooks:
+        st.subheader(f"Notebook {nb['number']}: {nb['title']}")
+        st.markdown(nb["description"])
+
+        col1, col2, col3 = st.columns([2, 2, 3])
+
+        with col1:
+            github_base = (
+                "https://github.com/daniel67014/"
+                "tsunami-earthquake-analysis/blob/main/jupyter_notebooks/"
+            )
+            github_url = f"{github_base}{nb['file']}"
+            st.markdown(f"[📖 View on GitHub]({github_url})")
+
+        with col2:
+            nbviewer_base = (
+                "https://nbviewer.org/github/daniel67014/"
+                "tsunami-earthquake-analysis/blob/main/jupyter_notebooks/"
+            )
+            nbviewer_url = f"{nbviewer_base}{nb['file']}"
+            st.markdown(f"[🔍 View in nbviewer]({nbviewer_url})")
+
+        with col3:
+            # Local file path option (only works when running locally)
+            local_path = (
+                Path(__file__).resolve().parent.parent
+                / "jupyter_notebooks"
+                / nb["file"]
+            )
+            if local_path.exists():
+                st.caption(f"✓ Available locally: `{nb['file']}`")
+            else:
+                st.caption("⚠ Not found locally")
+
+        st.markdown("---")
+
+    st.info(
+        """
+    **Viewing Options:**
+    - **GitHub**: Basic rendering with syntax highlighting
+    - **nbviewer**: Enhanced rendering with better notebook display
+    - **Local**: Clone the repository and run notebooks in Jupyter/VS Code
+      for full interactivity
+    """
+    )
+
+    st.markdown("### 🔗 Quick Links")
+    repo_base = "https://github.com/daniel67014/tsunami-earthquake-analysis"
+    st.markdown(f"- [📚 README Documentation]({repo_base}/blob/main/README.md)")
+    st.markdown(
+        f"- [📋 Assessment Criteria Mapping]"
+        f"({repo_base}/blob/main/docs/pass_criteria.md)"
+    )
+    st.markdown(f"- [💻 GitHub Repository]({repo_base})")
+
+
 def main():
     st.set_page_config(
         page_title="Tsunami–Earthquake Classifier", layout="wide"
@@ -438,7 +553,7 @@ def main():
     st.sidebar.title("Tsunami–Earthquake Analysis")
     page = st.sidebar.radio(
         "Navigation",
-        ["Predict", "Batch", "Explain", "Stats", "About"],
+        ["Predict", "Batch", "Explain", "Stats", "Notebooks", "About"],
     )
 
     try:
@@ -456,6 +571,8 @@ def main():
         page_explain(meta, model)
     elif page == "Stats":
         page_stats()
+    elif page == "Notebooks":
+        page_notebooks()
     else:
         page_about()
 

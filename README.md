@@ -122,13 +122,13 @@ Interactive web interface for model inference and exploration. Complements the n
 - **About**: AI-generated executive summary, ethics, data licensing, and limitations discussion.
 
 **Upcoming enhancements:**
-- Precision–recall curve visual in app (currently in [Notebook 03](jupyter_notebooks/03_model_training_and_prediction.ipynb)).
+- Precision–recall curve visual in app (currently in [Notebook 4](jupyter_notebooks/04_model_training_and_prediction.ipynb)).
 - Adjustable threshold slider to explore precision/recall trade-offs interactively.
 
 **Cross-references:**
-- Feature engineering logic: See [Notebook 02_02](jupyter_notebooks/02_02_etl_feature_engineering.ipynb) for interaction term derivation.
-- Model details & threshold selection: See [Notebook 03](jupyter_notebooks/03_model_training_and_prediction.ipynb).
-- Statistical foundations: See [Notebook 01](jupyter_notebooks/01_etl_extract_raw.ipynb).
+- Feature engineering logic: See [Notebook 3](jupyter_notebooks/03_etl_feature_engineering.ipynb) for interaction term derivation.
+- Model details & threshold selection: See [Notebook 4](jupyter_notebooks/04_model_training_and_prediction.ipynb).
+- Statistical foundations: See [Notebook 1](jupyter_notebooks/01_etl_extract_raw.ipynb).
 
 ### Running the app locally
 

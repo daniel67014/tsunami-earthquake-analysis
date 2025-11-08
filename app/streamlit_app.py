@@ -428,6 +428,26 @@ def page_about() -> None:
         "communication (8.1, 8.2), domain context (9.x), "
         "reflection (10.2, 11.2)."
     )
+    
+    st.markdown("---")
+    
+    st.subheader("📊 Project Management")
+    st.markdown(
+        """
+        This project was developed using GitHub Projects for agile task
+        management and milestone tracking:
+        """
+    )
+    st.markdown(
+        "- [📋 Full Pipeline - Tsunami Risk Project]"
+        "(https://github.com/users/daniel67014/projects/9/views/1) – "
+        "Complete project board tracking all tasks and milestones"
+    )
+    st.markdown(
+        "- [🎯 MVP - Tsunami Risk Project]"
+        "(https://github.com/users/daniel67014/projects/6/views/1) – "
+        "Minimum viable product board focusing on core deliverables"
+    )
 
 
 def page_notebooks():
@@ -543,6 +563,16 @@ def page_notebooks():
         f"({repo_base}/blob/main/docs/pass_criteria.md)"
     )
     st.markdown(f"- [💻 GitHub Repository]({repo_base})")
+    
+    st.markdown("### 📊 Project Management")
+    st.markdown(
+        "- [📋 Full Pipeline - Tsunami Risk Project]"
+        "(https://github.com/users/daniel67014/projects/9/views/1)"
+    )
+    st.markdown(
+        "- [🎯 MVP - Tsunami Risk Project]"
+        "(https://github.com/users/daniel67014/projects/6/views/1)"
+    )
 
 
 def main():

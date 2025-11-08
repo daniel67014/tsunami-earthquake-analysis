@@ -2,6 +2,11 @@
 
 This project builds a recall-first classifier to flag tsunami-related earthquakes from USGS-style seismic records. It includes a reproducible ETL and feature engineering pipeline (with interaction mining), model training and threshold tuning, and persisted artifacts ready for inference. A lightweight dashboard (Streamlit) provides Predict, Batch, Explain, Stats, and About pages. See `docs/pass_criteria.md` for the assessment mapping.
 
+### Project Management
+
+- [📋 Full Pipeline - Tsunami Risk Project](https://github.com/users/daniel67014/projects/9/views/1) – Complete project board tracking all tasks and milestones
+- [🎯 MVP - Tsunami Risk Project](https://github.com/users/daniel67014/projects/6/views/1) – Minimum viable product board focusing on core deliverables
+
 ## Notebooks
 
 The analysis is documented in four Jupyter notebooks (run in order):

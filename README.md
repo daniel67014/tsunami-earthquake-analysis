@@ -164,9 +164,11 @@ Deployment options:
 - Built as part of a Code Institute Data Analytics capstone.
 - Thanks to USGS-style earthquake data sources and open-source libraries (pandas, scikit-learn, xgboost, seaborn, matplotlib, joblib).
 
+
 ## Data Sources & Licensing
 
 - **Dataset**: Earthquake records with tsunami flag (USGS-style format). Public domain seismic data aggregated for educational use.
+- **Kaggle Source**: Portions of the dataset were sourced from Kaggle: [USGS Earthquake Catalog](https://www.kaggle.com/datasets/usgs/earthquake-database) (verify licensing before production use).
 - **Licensing**: This project is for academic demonstration. Source data follows public domain or open data policies; always verify current licensing for production use.
 - **Societal Impact**: Tsunami early-warning systems save lives. This model is exploratory only; operational systems require rigorous validation, multi-sensor fusion, and regulatory approval.
 
